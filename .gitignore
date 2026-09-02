@@ -5,6 +5,8 @@ dist
 .DS_Store
 backend/uploads/*
 !backend/uploads/.gitkeep
+backend/data/*
+!backend/data/.gitkeep
 frontend/dist
 .vite
 coverage

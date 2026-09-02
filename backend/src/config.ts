@@ -15,7 +15,11 @@ export const XAI_BASE_URL = process.env.XAI_BASE_URL ?? "https://api.x.ai/v1";
 export const XAI_IMAGE_MODEL = process.env.XAI_IMAGE_MODEL ?? "grok-imagine-image-2.0";
 export const AI_TIMEOUT_MS = Number(process.env.AI_TIMEOUT_MS ?? 60_000);
 export const AI_CONCURRENCY = Number(process.env.AI_CONCURRENCY ?? 4);
+export const AI_BUDGET_USD = Number(process.env.AI_BUDGET_USD ?? 5);
+export const DATA_DIR = path.join(BACKEND_DIR, "data");
+export const SPEND_FILE = path.join(DATA_DIR, "spend.json");
 
 export const UPLOADS_DIR = path.join(BACKEND_DIR, "uploads");
 export const PUBLIC_DIR = path.join(BACKEND_DIR, "public");
 export const REFERENCES_DIR = path.join(PUBLIC_DIR, "references");
+export const FRONTEND_DIST = path.join(ROOT_DIR, "frontend", "dist");
