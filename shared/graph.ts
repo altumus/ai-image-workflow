@@ -4,6 +4,12 @@ export type { Preset } from "./preset.ts";
 
 export type PortType = "text" | "image";
 
+export type NodeSpec = {
+  inputs: PortType[];
+  outputs: PortType[];
+  label: string;
+};
+
 export type NodeType =
   | "prompt"
   | "imageInput"

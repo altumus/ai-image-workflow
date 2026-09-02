@@ -1,14 +1,5 @@
 import type { Edge } from "@xyflow/react";
-import type { WorkflowNode } from "@entities/node/model/types";
-
-export type ScenarioId = "generate" | "edit" | "branch";
-
-type Scenario = {
-  id: ScenarioId;
-  title: string;
-  nodes: WorkflowNode[];
-  edges: Edge[];
-};
+import type { Scenario } from "./scenario-types";
 
 export const SCENARIOS: Scenario[] = [
   {

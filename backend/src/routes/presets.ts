@@ -1,5 +1,6 @@
 import type { FastifyInstance } from "fastify";
-import { getPreset, PRESETS, updatePreset, type PresetPatch } from "../domain/presets.ts";
+import type { PresetPatch } from "../../../shared/preset.ts";
+import { getPreset, PRESETS, updatePreset } from "../domain/presets.ts";
 
 export async function presetRoutes(app: FastifyInstance): Promise<void> {
   for (const prefix of ["/api/presets", "/presets"]) {

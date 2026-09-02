@@ -1,10 +1,4 @@
-import type { NodeType, PortType } from "./graph.ts";
-
-export type NodeSpec = {
-  inputs: PortType[];
-  outputs: PortType[];
-  label: string;
-};
+import type { NodeSpec, NodeType } from "./graph.ts";
 
 export const NODE_SPECS: Record<NodeType, NodeSpec> = {
   prompt: { inputs: [], outputs: ["text"], label: "Prompt" },

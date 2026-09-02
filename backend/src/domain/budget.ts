@@ -1,6 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { EditInput, GenerateInput, ImageProvider } from "../ai/provider.ts";
+import { EDIT_USD, GENERATE_USD, PER_INPUT_IMAGE_USD } from "./budget-costs.ts";
+import type { BudgetSnapshot, SpendFile } from "./budget-types.ts";
 
 export class BudgetExceededError extends Error {
   constructor(message: string) {
@@ -8,20 +10,6 @@ export class BudgetExceededError extends Error {
     this.name = "BudgetExceededError";
   }
 }
-
-export type BudgetSnapshot = {
-  limitUsd: number | null;
-  spentUsd: number;
-  remainingUsd: number | null;
-};
-
-type SpendFile = {
-  spentUsd: number;
-};
-
-const GENERATE_USD = 0.05;
-const EDIT_USD = 0.07;
-const PER_INPUT_IMAGE_USD = 0.01;
 
 export function estimateGenerateCost(input: GenerateInput): number {
   if (input.references?.length) {

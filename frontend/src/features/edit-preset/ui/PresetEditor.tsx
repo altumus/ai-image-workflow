@@ -3,8 +3,7 @@ import { createPortal } from "react-dom";
 import { updatePreset, useSelectedPreset } from "@entities/preset";
 import { api } from "@shared/api/client";
 import { Button } from "@shared/ui/Button";
-
-const MAX_REFS = 5;
+import { MAX_PRESET_REFERENCES } from "@workflow/shared/preset-constants";
 
 type Props = {
   onClose: () => void;
@@ -32,8 +31,8 @@ export function PresetEditor({ onClose }: Props) {
 
   async function onUpload(file?: File) {
     if (!file) return;
-    if (references.length >= MAX_REFS) {
-      setError(`At most ${MAX_REFS} references`);
+    if (references.length >= MAX_PRESET_REFERENCES) {
+      setError(`At most ${MAX_PRESET_REFERENCES} references`);
       return;
     }
     try {
@@ -88,7 +87,7 @@ export function PresetEditor({ onClose }: Props) {
           />
         </label>
         <div className="field">
-          <span>References ({references.length}/{MAX_REFS})</span>
+          <span>References ({references.length}/{MAX_PRESET_REFERENCES})</span>
           <div className="ref-row">
             {references.map((url) => (
               <div className="ref-chip" key={url}>
@@ -103,7 +102,7 @@ export function PresetEditor({ onClose }: Props) {
                 </button>
               </div>
             ))}
-            {references.length < MAX_REFS && (
+            {references.length < MAX_PRESET_REFERENCES && (
               <label className="btn file-btn ref-add">
                 + Add
                 <input
