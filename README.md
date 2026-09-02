@@ -1,18 +1,18 @@
 # AI Image Workflow Mini
 
-Небольшой node-based редактор и backend-раннер графа. Тестовое: frontend (FSD), backend, реальный image-generation API, выполнение DAG с параллельными ветками.
+A small node-based editor and backend graph runner. It covers frontend (Feature-Sliced Design), backend, a real image-generation API call, and DAG execution with parallel branches.
 
-## Сценарии
+## Scenarios
 
-1. **Generate** — Prompt → Generate Image → Result
-2. **Edit** — Image Input + Prompt → Edit Image → Result
-3. **Branch** — один Prompt → Generate A / Generate B → два Result. Независимые ветки стартуют одновременно.
+1. **Generate:** Prompt -> Generate Image -> Result
+2. **Edit:** Image Input + Prompt -> Edit Image -> Result
+3. **Branch:** one Prompt -> Generate A / Generate B -> two Result nodes. Independent branches start at the same time.
 
-## Запуск
+## Run
 
 ```bash
 cp .env.example .env
-# в .env: XAI_API_KEY=...
+# in .env: XAI_API_KEY=...
 
 npm install
 npm run dev
@@ -21,106 +21,106 @@ npm run dev
 - UI: http://localhost:5173
 - API: http://localhost:3001
 
-Без `XAI_API_KEY` backend поднимается с mock-провайдером (SVG-заглушки), чтобы можно было проверить граф и UI. Для живой генерации ключ обязателен.
+Without `XAI_API_KEY` the backend uses a mock image provider (SVG placeholders) so you can still exercise the graph and UI. A key is required for live generation.
 
 ```bash
-npm test   # vitest: валидация графа, параллельные ветки, retry
+npm test   # vitest: graph validation, parallel branches, retry
 ```
 
-## Архитектура
+## Architecture
 
 ```
 frontend/   Vite + React + TypeScript + xyflow, Feature-Sliced Design
 backend/    Fastify + TypeScript, in-memory runs
-shared/     типы графа и валидация портов/DAG
+shared/     graph types and port/DAG validation
 ```
 
-FSD на фронте прагматичный: canvas и ноды не содержат правил выполнения. Соединения и запуск живут в `entities` / `features`.
+Frontend FSD is pragmatic: canvas and node components do not own execution rules. Connections and run logic live in `entities` / `features`.
 
-### Слои frontend
+### Frontend layers
 
-| Слой | Что внутри |
+| Layer | Contents |
 |---|---|
-| `pages/workflow-editor` | Сборка экрана |
-| `widgets` | Canvas, палитра, бар пресета, панель job |
-| `features` | connect/typed ports, run+poll+retry, upload, сценарии |
-| `entities` | graph store, node UI, run/preset |
-| `shared` | api client, кнопки, статусы |
+| `pages/workflow-editor` | Screen composition |
+| `widgets` | Canvas, palette, preset bar, job panel |
+| `features` | connect / typed ports, run + poll + retry, upload, scenarios |
+| `entities` | graph store, node UI, run, preset |
+| `shared` | api client, buttons, status badges |
 
-### Выполнение графа
+### Graph execution
 
-`POST /runs` (и `/api/runs`) → `{ runId }`, затем polling `GET /runs/:runId`.
+`POST /runs` (also `/api/runs`) -> `{ runId }`, then poll `GET /runs/:runId`.
 
-Планировщик идёт волнами: в очередь попадают ноды, у которых все входы `success`. Готовая пачка AI-job запускается через `Promise.all` (лимит 4). Prompt / Image Input / Result — пассивные, без вызова модели.
+The scheduler runs in waves: a node is queued when every inbound dependency is `success`. Ready AI jobs in the same wave start together via `Promise.all` (concurrency limit 4). Prompt, Image Input, and Result are passive and do not call the model.
 
-Состояния job: `idle → queued → running → success | error`.  
-Состояния run: `queued | running | completed | failed`.
+Job states: `idle -> queued -> running -> success | error`.
+Run states: `queued | running | completed | failed`.
 
-`POST /api/runs/:runId/nodes/:nodeId/retry` сбрасывает failed-ноду и её потомков, успешные предки не пересчитываются.
+`POST /runs/:runId/nodes/:nodeId/retry` resets the failed node and its descendants. Successful ancestors are not recomputed.
 
-Порты только `text` и `image`. Несовместимые рёбра и циклы блокируются и в UI, и на backend.
+Ports are only `text` and `image`. Incompatible edges and cycles are blocked in the UI and on the backend.
 
-## Preset и Request Builder
+## Preset and Request Builder
 
-Preset — отдельная сущность data model, не логика UI.
+Preset is a data-model entity, not UI logic.
 
-- тип: `shared/preset.ts`
-- каталог: `backend/src/domain/presets.ts`
-- фронт: `entities/preset` (store + API + селекторы)
-- UI только выбирает `presetId`; склейка с user prompt живёт в `shared/request-builder.ts` и применяется на backend при старте run
+- type: `shared/preset.ts`
+- catalog: `backend/src/domain/presets.ts`
+- frontend: `entities/preset` (store + API + selectors)
+- the UI only selects `presetId`; merging with the user prompt lives in `shared/request-builder.ts` and is applied on the backend when a run starts
 
-Один готовый набор `Premium 3D` (`preset-demo`). Preset Editor нет.
+There is one built-in preset, `Premium 3D` (`preset-demo`). There is no Preset Editor.
 
 ```
 User Prompt  +  Selected Preset
-                 │
-                 ▼
+                 |
+                 ->
            Request Builder
              mainPrompt
              negativePrompt
              references
-                 │
-                 ▼
+                 |
+                 ->
            Generate Image API
 ```
 
-Код: `shared/request-builder.ts`. Панель справа показывает собранный запрос до Run.
+Code: `shared/request-builder.ts`. The right-hand panel shows the built request before Run.
 
-xAI Imagine не имеет отдельного `negative_prompt` — negative вшивается в итоговый `prompt`. Если пресет выбран, Generate идёт как image edit с reference-картинками `/references/ref-1.jpg` и `ref-2.jpg`, чтобы стиль опирался на референсы. Edit Image берёт connected image как source; preset-референсы туда не подмешиваются.
+xAI Imagine has no native `negative_prompt` field, so the negative text is folded into the final `prompt`. When a preset is selected, Generate is sent as an image edit with reference images `/references/ref-1.jpg` and `ref-2.jpg` so style follows the references. Edit Image uses the connected image as the source; preset references are not mixed into that call.
 
 ## AI
 
-Ключ только на сервере. Адаптер: `backend/src/ai/xai-imagine.ts`.
+The API key stays on the server. Adapter: `backend/src/ai/xai-imagine.ts`.
 
-- Generate без references → `POST https://api.x.ai/v1/images/generations`
-- Generate с preset references / Edit Image → `POST https://api.x.ai/v1/images/edits`
-- Модель: `grok-imagine-image-2.0`
-- Таймаут: 60 с
+- Generate without references -> `POST https://api.x.ai/v1/images/generations`
+- Generate with preset references / Edit Image -> `POST https://api.x.ai/v1/images/edits`
+- Model: `grok-imagine-image-2.0`
+- Timeout: 60s
 
-Если выдадут другой image API, меняется только `backend/src/ai/*`.
+To swap the image provider, change only `backend/src/ai/*`.
 
 ## API
 
-| Метод | Путь | Назначение |
+| Method | Path | Purpose |
 |---|---|---|
-| POST | `/runs` | Старт run → `{ runId }` |
+| POST | `/runs` | Start a run -> `{ runId }` |
 | GET | `/runs/:runId` | `queued / running / completed / failed` + jobs |
-| POST | `/runs/:runId/nodes/:nodeId/retry` | Retry failed node |
-| GET | `/presets` | Каталог пресетов |
-| GET | `/presets/:id` | Один пресет |
-| POST | `/api/uploads` | Загрузка Image Input |
-| GET | `/api/health` | `xai` или `mock` |
+| POST | `/runs/:runId/nodes/:nodeId/retry` | Retry a failed node |
+| GET | `/presets` | Preset catalog |
+| GET | `/presets/:id` | One preset |
+| POST | `/api/uploads` | Image Input upload |
+| GET | `/api/health` | `xai` or `mock` |
 
-Те же run/preset маршруты доступны с префиксом `/api` для Vite-прокси.
+The same run and preset routes are also available under `/api` for the Vite proxy.
 
-## Что сознательно не сделано
+## Out of scope
 
-- База данных, auth, multi-user
-- SSE/WebSocket (в ТЗ разрешён polling)
+- Database, auth, multi-user
+- SSE / WebSocket (polling is used)
 - Preset Editor
-- Undo/redo, minimap
-- Свой canvas engine
+- Undo / redo, minimap
+- A custom canvas engine
 
-## Как проверить параллельность
+## How to check parallelism
 
-Сценарий **3. Branch** → Run. В панели Jobs оба Generate должны оказаться в `running` одновременно. Юнит-тест `runs independent generate nodes in the same wave` проверяет, что `maxInFlight === 2`.
+Load scenario **3. Branch**, then Run. In the Jobs panel both Generate nodes should be `running` at the same time. The unit test `runs independent generate nodes in the same wave` asserts `maxInFlight === 2`.
