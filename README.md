@@ -40,7 +40,7 @@ Railway deploys from GitHub. Commit this project and push it to a repository.
 1. Open [https://railway.com](https://railway.com) and sign in with GitHub.
 2. **New Project** -> **Deploy from GitHub repo**.
 3. Pick this repository.
-4. Railway starts a Node build from the repo root (`npm install && npm run build`, then `npm start`).
+4. Railway builds the `Dockerfile` at the repo root, then starts `npx tsx backend/src/index.ts`.
 
 ### 3. Add the API key
 
@@ -75,10 +75,10 @@ Health check: `GET /api/health` should return `{ "ok": true, "provider": "xai" }
 
 | Step | Command |
 |---|---|
-| Build | `npm install && npm run build` (Vite bundle in `frontend/dist`) |
-| Start | `npm start` (Fastify on `PORT`, serves `frontend/dist` plus the API) |
+| Build | Docker image: `npm ci` + `npm run build` (Vite bundle in `frontend/dist`) |
+| Start | `npx tsx backend/src/index.ts` (Fastify on `PORT`, serves `frontend/dist` plus the API) |
 
-Config is in `railway.toml`. Node 22 is expected (`engines` in the root `package.json`).
+Config is in `railway.toml` and `Dockerfile`. Node 22. If you see `Application failed to respond` (502), open the service **Deployments** logs: the process was not listening on `PORT`.
 
 ### Cost cap ($5)
 

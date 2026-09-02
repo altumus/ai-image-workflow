@@ -9,10 +9,13 @@
     "dev": "concurrently -n api,web -c cyan,magenta \"npm run dev -w backend\" \"npm run dev -w frontend\"",
     "test": "npm run test -w backend",
     "build": "npm run build -w frontend",
-    "start": "npm run start -w backend"
+    "start": "npx tsx backend/src/index.ts"
   },
   "engines": {
     "node": ">=22"
+  },
+  "dependencies": {
+    "tsx": "^4.19.3"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
