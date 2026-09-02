@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildRequest } from "../../../shared/request-builder.ts";
-import { PRESETS } from "./presets.ts";
+import { PRESETS, updatePreset } from "./presets.ts";
 
 const preset = PRESETS[0];
 
@@ -26,5 +26,18 @@ describe("Request Builder", () => {
     expect(request.prompt).toContain("User request:");
     expect(request.prompt).toContain("a perfume bottle");
     expect(request.prompt).toContain(`Avoid: ${request.negativePrompt}`);
+  });
+
+  it("updates preset fields and rejects invalid references", () => {
+    const original = [...preset.references];
+    const updated = updatePreset("preset-demo", {
+      name: "Premium 3D",
+      references: ["/uploads/custom.jpg"],
+    });
+    expect(updated.references).toEqual(["/uploads/custom.jpg"]);
+    expect(() => updatePreset("preset-demo", { references: ["https://evil.example/x.png"] })).toThrow(
+      /Invalid reference/,
+    );
+    updatePreset("preset-demo", { references: original });
   });
 });

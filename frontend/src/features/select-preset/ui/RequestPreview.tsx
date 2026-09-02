@@ -18,7 +18,7 @@ export function RequestPreview() {
       <dl className="request-fields">
         <div>
           <dt>User prompt</dt>
-          <dd>{request.userPrompt || "—"}</dd>
+          <dd className="scroll-clip">{request.userPrompt || "—"}</dd>
         </div>
         <div>
           <dt>Preset</dt>
@@ -28,11 +28,11 @@ export function RequestPreview() {
           <>
             <div>
               <dt>mainPrompt</dt>
-              <dd>{request.mainPrompt}</dd>
+              <dd className="scroll-clip">{request.mainPrompt}</dd>
             </div>
             <div>
               <dt>negativePrompt</dt>
-              <dd>{request.negativePrompt || "—"}</dd>
+              <dd className="scroll-clip">{request.negativePrompt || "—"}</dd>
             </div>
             <div>
               <dt>references</dt>

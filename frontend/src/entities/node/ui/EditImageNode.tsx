@@ -12,12 +12,11 @@ export function EditImageNode({ id, data, selected }: NodeProps<WorkflowNode>) {
         Needs image + text. Fallback prompt:
       </p>
       <textarea
-        className="wf-textarea nodrag nowheel"
+        className="wf-textarea wf-textarea-fixed nodrag nowheel"
         value={data.text ?? ""}
         placeholder="Optional local prompt"
         onChange={(event) => updateNodeData(id, { text: event.target.value })}
       />
-      {data.imageUrl && <img className="preview" src={data.imageUrl} alt="edited" />}
     </NodeShell>
   );
 }

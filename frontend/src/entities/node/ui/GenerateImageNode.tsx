@@ -9,9 +9,9 @@ export function GenerateImageNode({ data, selected }: NodeProps<WorkflowNode>) {
   return (
     <NodeShell type="generateImage" title={data.label ?? "Generate Image"} selected={selected}>
       <p className="hint" style={{ margin: 0 }}>
-        text → image. Request Builder {preset ? `uses ${preset.name}` : "sends the user prompt as-is"}.
+        text to image. {preset ? `Uses ${preset.name}.` : "Sends the user prompt as-is."} Preview
+        appears on Result.
       </p>
-      {data.imageUrl && <img className="preview" src={data.imageUrl} alt="generated" />}
     </NodeShell>
   );
 }

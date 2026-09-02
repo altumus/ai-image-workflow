@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { SCENARIOS, useGraphStore } from "@entities/graph";
 import { loadPresets, usePresetStore } from "@entities/preset";
 import { useRunStore } from "@entities/run/model/store";
+import { PresetEditor } from "@features/edit-preset/ui/PresetEditor";
 import { useRunGraph } from "@features/run-graph/model/useRunGraph";
 import { Button } from "@shared/ui/Button";
 import { StatusBadge } from "@shared/ui/StatusBadge";
@@ -11,6 +12,7 @@ export function PresetBar() {
   const selectedId = usePresetStore((state) => state.selectedId);
   const setGraph = useGraphStore((state) => state.setGraph);
   const { start, busy, run } = useRunGraph();
+  const [editorOpen, setEditorOpen] = useState(false);
 
   useEffect(() => {
     void loadPresets().catch(() => undefined);
@@ -50,11 +52,19 @@ export function PresetBar() {
             </option>
           ))}
         </select>
+        <Button
+          variant="ghost"
+          disabled={!selectedId}
+          onClick={() => setEditorOpen(true)}
+        >
+          Edit preset
+        </Button>
         <Button variant="primary" disabled={busy} onClick={() => void start()}>
           {busy ? "Running…" : "Run graph"}
         </Button>
         {run && <StatusBadge status={run.status} />}
       </div>
+      {editorOpen && selectedId && <PresetEditor onClose={() => setEditorOpen(false)} />}
     </header>
   );
 }

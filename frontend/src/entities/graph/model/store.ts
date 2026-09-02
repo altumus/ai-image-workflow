@@ -72,6 +72,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   patchOutputs: (jobs) => {
     set({
       nodes: get().nodes.map((node) => {
+        if (node.type !== "result") return node;
         const imageUrl = jobs[node.id]?.output?.imageUrl;
         if (!imageUrl) return node;
         return { ...node, data: { ...node.data, imageUrl } };
