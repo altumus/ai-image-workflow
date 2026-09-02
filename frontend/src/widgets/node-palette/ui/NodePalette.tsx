@@ -1,4 +1,5 @@
-import { NODE_SPECS, type NodeType } from "@workflow/shared/graph";
+import type { NodeType } from "@workflow/shared/graph";
+import { NODE_SPECS } from "@workflow/shared/node-specs";
 import { useGraphStore } from "@entities/graph";
 import { Button } from "@shared/ui/Button";
 

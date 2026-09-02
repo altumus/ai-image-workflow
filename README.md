@@ -104,7 +104,7 @@ A Railway hard limit on the workspace (Usage -> Set Usage Limits) is still usefu
 ```
 frontend/   Vite + React + TypeScript + xyflow, Feature-Sliced Design
 backend/    Fastify + TypeScript, in-memory runs
-shared/     graph types and port/DAG validation
+shared/     graph types, node specs, port/DAG validation
 ```
 
 Frontend FSD is pragmatic: canvas and node components do not own execution rules. Connections and run logic live in `entities` / `features`.

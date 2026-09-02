@@ -1,10 +1,5 @@
-import {
-  NODE_SPECS,
-  type Graph,
-  type GraphEdge,
-  type NodeType,
-  type PortType,
-} from "./graph.ts";
+import type { Graph, GraphEdge, NodeType, PortType } from "./graph.ts";
+import { NODE_SPECS } from "./node-specs.ts";
 
 export type ValidationResult = { ok: true } | { ok: false; error: string };
 
