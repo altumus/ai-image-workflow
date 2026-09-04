@@ -47,6 +47,8 @@ body,
 #root {
   margin: 0;
   height: 100%;
+  height: 100dvh;
+  overflow: hidden;
 }
 
 button,
@@ -62,7 +64,7 @@ button {
 .app-shell {
   height: 100%;
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto minmax(0, 1fr);
   background:
     radial-gradient(1200px 500px at 80% -10%, rgba(62, 224, 197, 0.08), transparent 50%),
     var(--bg);
@@ -71,8 +73,11 @@ button {
 .topbar {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px 16px;
   padding: 12px 16px;
+  padding-top: max(12px, env(safe-area-inset-top));
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
   border-bottom: 1px solid var(--line);
   background: rgba(11, 15, 20, 0.86);
   backdrop-filter: blur(12px);
@@ -81,7 +86,8 @@ button {
 .brand {
   display: flex;
   flex-direction: column;
-  min-width: 220px;
+  min-width: 0;
+  flex: 0 1 auto;
 }
 
 .brand strong {
@@ -99,12 +105,40 @@ button {
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.topbar-end {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.topbar-toggles {
+  display: none;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
 }
 
 .workspace {
   display: grid;
-  grid-template-columns: 210px 1fr 280px;
+  grid-template-columns: 210px minmax(0, 1fr) 280px;
   min-height: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.workspace-backdrop {
+  display: none;
 }
 
 .palette,
@@ -112,12 +146,38 @@ button {
   background: var(--bg-raise);
   border-right: 1px solid var(--line);
   padding: 14px;
+  padding-bottom: max(14px, env(safe-area-inset-bottom));
   overflow: auto;
+}
+
+.palette {
+  padding-left: max(14px, env(safe-area-inset-left));
 }
 
 .run-panel {
   border-right: 0;
   border-left: 1px solid var(--line);
+  padding-right: max(14px, env(safe-area-inset-right));
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.panel-head .section-label {
+  margin-bottom: 0;
+}
+
+.panel-close {
+  display: none;
+}
+
+.panel-head-mobile {
+  display: none;
 }
 
 .section-label {
@@ -223,12 +283,25 @@ button {
   border-radius: 8px;
   border: 1px solid transparent;
   background: transparent;
-  color: var(--danger);
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1;
 }
 
 .icon-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--line);
+  color: var(--text);
+}
+
+.icon-btn.danger {
+  color: var(--danger);
+}
+
+.icon-btn.danger:hover {
   background: rgba(255, 107, 122, 0.14);
   border-color: rgba(255, 107, 122, 0.35);
+  color: var(--danger);
 }
 
 .modal-backdrop {
@@ -264,6 +337,7 @@ button {
 .modal-actions {
   display: flex;
   justify-content: flex-end;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
@@ -440,6 +514,7 @@ button {
 
 .ref-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
 }
 
@@ -470,6 +545,7 @@ button {
   justify-content: space-between;
   gap: 8px;
   align-items: center;
+  flex-wrap: wrap;
   margin-bottom: 6px;
 }
 
@@ -494,6 +570,7 @@ button {
 
 .react-flow {
   min-width: 0;
+  min-height: 0;
   background: #0d1218;
 }
 
@@ -530,6 +607,8 @@ button {
   color: var(--text);
   border-radius: 10px;
   padding: 8px 10px;
+  max-width: 220px;
+  min-width: 0;
 }
 
 .file-btn {
@@ -542,4 +621,204 @@ button {
   inset: 0;
   opacity: 0;
   cursor: pointer;
+}
+
+@media (max-width: 1280px) {
+  .workspace {
+    grid-template-columns: 180px minmax(0, 1fr) 250px;
+  }
+}
+
+@media (max-width: 1099px) {
+  .topbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .brand {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .topbar-end {
+    grid-column: 2;
+    grid-row: 1;
+    margin-left: 0;
+  }
+
+  .topbar-actions {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+
+  .topbar-actions .btn,
+  .topbar-actions .select {
+    flex-shrink: 0;
+  }
+
+  .topbar-toggles {
+    display: flex;
+  }
+
+  .panel-close {
+    display: grid;
+  }
+
+  .panel-head-mobile {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 4px;
+  }
+
+  .workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .workspace-backdrop {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 15;
+    border: 0;
+    background: rgba(5, 8, 12, 0.5);
+    cursor: pointer;
+  }
+
+  .palette,
+  .run-panel {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 20;
+    width: min(320px, calc(100vw - 48px));
+    box-shadow: var(--shadow);
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      transform 0.2s ease,
+      visibility 0.2s ease;
+  }
+
+  .palette {
+    left: 0;
+    transform: translateX(-110%);
+  }
+
+  .run-panel {
+    right: 0;
+    left: auto;
+    transform: translateX(110%);
+  }
+
+  .palette.is-open,
+  .run-panel.is-open {
+    transform: translateX(0);
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .palette .btn,
+  .run-panel .btn {
+    min-height: 40px;
+  }
+
+  .react-flow__controls {
+    margin-bottom: max(10px, env(safe-area-inset-bottom));
+    margin-left: max(10px, env(safe-area-inset-left));
+  }
+}
+
+@media (max-width: 720px) {
+  .topbar {
+    grid-template-columns: 1fr;
+    padding: 10px 12px;
+    padding-top: max(10px, env(safe-area-inset-top));
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+    gap: 8px 10px;
+  }
+
+  .brand,
+  .topbar-end,
+  .topbar-actions {
+    grid-column: 1;
+  }
+
+  .brand {
+    grid-row: 1;
+  }
+
+  .brand span {
+    display: none;
+  }
+
+  .brand strong {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .topbar-end {
+    grid-row: 2;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .topbar-actions {
+    grid-row: 3;
+  }
+
+  .btn,
+  .select {
+    padding: 7px 10px;
+    font-size: 13px;
+  }
+
+  .palette,
+  .run-panel {
+    width: min(360px, calc(100vw - 32px));
+  }
+
+  .wf-node {
+    width: 220px;
+  }
+
+  .modal {
+    width: min(380px, calc(100vw - 20px));
+    padding: 16px;
+  }
+
+  .modal-wide {
+    width: min(460px, calc(100vw - 20px));
+    max-height: min(92dvh, 720px);
+  }
+}
+
+@media (max-width: 480px) {
+  .topbar-toggles .btn,
+  .topbar-end .btn.primary {
+    min-height: 36px;
+  }
+
+  .modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .modal-actions .btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .react-flow__controls-button {
+    width: 28px;
+    height: 28px;
+  }
 }

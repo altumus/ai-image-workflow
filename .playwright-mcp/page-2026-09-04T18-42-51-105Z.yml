@@ -1,0 +1,58 @@
+- generic [ref=f1e3]:
+  - banner [ref=f1e4]:
+    - strong [ref=f1e6]: AI Image Workflow Mini
+    - generic [ref=f1e7]:
+      - button "1. Generate" [ref=f1e8] [cursor=pointer]
+      - button "2. Edit" [ref=f1e9] [cursor=pointer]
+      - button "3. Branch" [ref=f1e10] [cursor=pointer]
+      - combobox [ref=f1e11]:
+        - option "No preset" [selected]
+      - button "Edit preset" [ref=f1e12] [cursor=pointer]
+    - generic [ref=f1e13]:
+      - generic [ref=f1e14]:
+        - button "Nodes" [ref=f1e15] [cursor=pointer]
+        - button "Jobs" [ref=f1e16] [cursor=pointer]
+      - button "Run graph" [ref=f1e17] [cursor=pointer]
+  - application [ref=f1e19]:
+    - generic [ref=f1e21]:
+      - generic:
+        - generic:
+          - img:
+            - group "Edge from prompt-1 to gen-1" [ref=f1e22] [cursor=pointer]
+          - img:
+            - group "Edge from gen-1 to result-1" [ref=f1e25] [cursor=pointer]
+        - generic:
+          - group [ref=f1e28]:
+            - article [ref=f1e29]:
+              - generic [ref=f1e31]:
+                - generic [ref=f1e32]: Prompt
+                - generic [ref=f1e33]:
+                  - generic [ref=f1e34]: idle
+                  - button "Delete Prompt" [ref=f1e35] [cursor=pointer]
+              - generic [ref=f1e39]:
+                - textbox "Describe the image..." [ref=f1e40]: a premium minimal 3D desk lamp, studio lighting
+                - generic [ref=f1e41]: 47 characters · scroll inside the field
+          - group [ref=f1e42]:
+            - article [ref=f1e43]:
+              - generic [ref=f1e46]:
+                - generic [ref=f1e47]: Generate Image
+                - generic [ref=f1e48]:
+                  - generic [ref=f1e49]: idle
+                  - button "Delete Generate Image" [ref=f1e50] [cursor=pointer]
+              - paragraph [ref=f1e55]: text to image. Sends the user prompt as-is. Preview appears on Result.
+          - group [ref=f1e56]:
+            - article [ref=f1e57]:
+              - generic [ref=f1e59]:
+                - generic [ref=f1e60]: Result
+                - generic [ref=f1e61]:
+                  - generic [ref=f1e62]: idle
+                  - button "Delete Result" [ref=f1e63] [cursor=pointer]
+              - generic [ref=f1e67]: Waiting for image
+    - generic "Control Panel" [ref=f1e69]:
+      - button "Zoom In" [ref=f1e70] [cursor=pointer]
+      - button "Zoom Out" [disabled]
+      - button "Fit View" [ref=f1e73] [cursor=pointer]
+      - button "Toggle Interactivity" [ref=f1e76] [cursor=pointer]
+    - link "React Flow attribution" [ref=f1e80] [cursor=pointer]:
+      - /url: https://reactflow.dev/attribution
+      - text: React Flow

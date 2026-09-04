@@ -4,13 +4,35 @@ import { useRunGraph } from "@features/run-graph/model/useRunGraph";
 import { Button } from "@shared/ui/Button";
 import { StatusBadge } from "@shared/ui/StatusBadge";
 
-export function RunPanel() {
+type Props = {
+  open?: boolean;
+  onClose?: () => void;
+};
+
+export function RunPanel({ open = true, onClose }: Props) {
   const nodes = useGraphStore((state) => state.nodes);
   const { run, localError, retry } = useRunGraph();
   const jobs = run?.jobs ?? {};
 
   return (
-    <aside className="run-panel">
+    <aside
+      id="jobs-panel"
+      className={`run-panel ${open ? "is-open" : ""}`}
+      aria-hidden={!open}
+      inert={!open || undefined}
+    >
+      <div className="panel-head panel-head-mobile">
+        {onClose && (
+          <button
+            type="button"
+            className="icon-btn panel-close"
+            aria-label="Close jobs panel"
+            onClick={onClose}
+          >
+            ×
+          </button>
+        )}
+      </div>
       <RequestPreview />
       <div className="section-label">Jobs</div>
       {run && (

@@ -7,7 +7,14 @@ import { useRunGraph } from "@features/run-graph/model/useRunGraph";
 import { Button } from "@shared/ui/Button";
 import { StatusBadge } from "@shared/ui/StatusBadge";
 
-export function PresetBar() {
+export type MobilePanel = "palette" | "jobs";
+
+type Props = {
+  mobilePanel?: MobilePanel | null;
+  onTogglePanel?: (panel: MobilePanel) => void;
+};
+
+export function PresetBar({ mobilePanel = null, onTogglePanel }: Props) {
   const presets = usePresetStore((state) => state.presets);
   const selectedId = usePresetStore((state) => state.selectedId);
   const setGraph = useGraphStore((state) => state.setGraph);
@@ -59,6 +66,30 @@ export function PresetBar() {
         >
           Edit preset
         </Button>
+      </div>
+      <div className="topbar-end">
+        {onTogglePanel && (
+          <div className="topbar-toggles">
+            <Button
+              variant="ghost"
+              aria-controls="nodes-panel"
+              aria-expanded={mobilePanel === "palette"}
+              aria-pressed={mobilePanel === "palette"}
+              onClick={() => onTogglePanel("palette")}
+            >
+              Nodes
+            </Button>
+            <Button
+              variant="ghost"
+              aria-controls="jobs-panel"
+              aria-expanded={mobilePanel === "jobs"}
+              aria-pressed={mobilePanel === "jobs"}
+              onClick={() => onTogglePanel("jobs")}
+            >
+              Jobs
+            </Button>
+          </div>
+        )}
         <Button variant="primary" disabled={busy} onClick={() => void start()}>
           {busy ? "Running…" : "Run graph"}
         </Button>

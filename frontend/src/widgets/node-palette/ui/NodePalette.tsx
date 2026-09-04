@@ -5,16 +5,45 @@ import { Button } from "@shared/ui/Button";
 
 const TYPES = Object.keys(NODE_SPECS) as NodeType[];
 
-export function NodePalette() {
+type Props = {
+  open?: boolean;
+  onClose?: () => void;
+};
+
+export function NodePalette({ open = true, onClose }: Props) {
   const addNode = useGraphStore((state) => state.addNode);
   const deleteSelected = useGraphStore((state) => state.deleteSelected);
 
   return (
-    <aside className="palette">
-      <div className="section-label">Nodes</div>
+    <aside
+      id="nodes-panel"
+      className={`palette ${open ? "is-open" : ""}`}
+      aria-hidden={!open}
+      inert={!open || undefined}
+    >
+      <div className="panel-head">
+        <div className="section-label">Nodes</div>
+        {onClose && (
+          <button
+            type="button"
+            className="icon-btn panel-close"
+            aria-label="Close nodes panel"
+            onClick={onClose}
+          >
+            ×
+          </button>
+        )}
+      </div>
       <div className="palette-list">
         {TYPES.map((type) => (
-          <Button key={type} className="full" onClick={() => addNode(type)}>
+          <Button
+            key={type}
+            className="full"
+            onClick={() => {
+              addNode(type);
+              onClose?.();
+            }}
+          >
             {NODE_SPECS[type].label}
           </Button>
         ))}

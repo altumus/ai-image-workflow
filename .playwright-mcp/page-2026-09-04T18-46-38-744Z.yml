@@ -1,0 +1,74 @@
+- generic [ref=f3e3]:
+  - banner [ref=f3e4]:
+    - strong [ref=f3e6]: AI Image Workflow Mini
+    - generic [ref=f3e7]:
+      - button "1. Generate" [ref=f3e8] [cursor=pointer]
+      - button "2. Edit" [active] [ref=f3e9] [cursor=pointer]
+      - button "3. Branch" [ref=f3e10] [cursor=pointer]
+      - combobox [ref=f3e11]:
+        - option "No preset" [selected]
+      - button "Edit preset" [ref=f3e12] [cursor=pointer]
+    - generic [ref=f3e13]:
+      - generic [ref=f3e14]:
+        - button "Nodes" [ref=f3e15] [cursor=pointer]
+        - button "Jobs" [ref=f3e16] [cursor=pointer]
+      - button "Run graph" [ref=f3e17] [cursor=pointer]
+  - application [ref=f3e19]:
+    - generic [ref=f3e21]:
+      - generic:
+        - generic:
+          - img:
+            - group "Edge from image-1 to edit-1" [ref=f3e140] [cursor=pointer]
+          - img:
+            - group "Edge from prompt-1 to edit-1" [ref=f3e143] [cursor=pointer]
+          - img:
+            - group "Edge from edit-1 to result-1" [ref=f3e146] [cursor=pointer]
+        - generic:
+          - group [ref=f3e149]:
+            - article [ref=f3e150]:
+              - generic [ref=f3e152]:
+                - generic [ref=f3e153]: Image Input
+                - generic [ref=f3e154]:
+                  - generic [ref=f3e155]: idle
+                  - button "Delete Image Input" [ref=f3e156] [cursor=pointer]
+              - generic [ref=f3e160]:
+                - img "input" [ref=f3e161]
+                - generic [ref=f3e162]:
+                  - text: Upload image
+                  - button "Upload image" [ref=f3e163] [cursor=pointer]
+          - group [ref=f3e28]:
+            - article [ref=f3e29]:
+              - generic [ref=f3e31]:
+                - generic [ref=f3e32]: Prompt
+                - generic [ref=f3e33]:
+                  - generic [ref=f3e34]: idle
+                  - button "Delete Prompt" [ref=f3e35] [cursor=pointer]
+              - generic [ref=f3e39]:
+                - textbox "Describe the image..." [ref=f3e40]: turn it into a champagne-gold sculpture on a dark plinth
+                - generic [ref=f3e41]: 56 characters · scroll inside the field
+          - group [ref=f3e164]:
+            - article [ref=f3e165]:
+              - generic [ref=f3e169]:
+                - generic [ref=f3e170]: Edit Image
+                - generic [ref=f3e171]:
+                  - generic [ref=f3e172]: idle
+                  - button "Delete Edit Image" [ref=f3e173] [cursor=pointer]
+              - generic [ref=f3e177]:
+                - paragraph [ref=f3e178]: "Needs image + text. Fallback prompt:"
+                - textbox "Optional local prompt" [ref=f3e179]
+          - group [ref=f3e56]:
+            - article [ref=f3e57]:
+              - generic [ref=f3e59]:
+                - generic [ref=f3e60]: Result
+                - generic [ref=f3e61]:
+                  - generic [ref=f3e62]: idle
+                  - button "Delete Result" [ref=f3e63] [cursor=pointer]
+              - generic [ref=f3e67]: Waiting for image
+    - generic "Control Panel" [ref=f3e69]:
+      - button "Zoom In" [ref=f3e70] [cursor=pointer]
+      - button "Zoom Out" [disabled]
+      - button "Fit View" [ref=f3e73] [cursor=pointer]
+      - button "Toggle Interactivity" [ref=f3e76] [cursor=pointer]
+    - link "React Flow attribution" [ref=f3e80] [cursor=pointer]:
+      - /url: https://reactflow.dev/attribution
+      - text: React Flow
