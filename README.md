@@ -1,6 +1,6 @@
 # AI Image Workflow Mini
 
-Live Demo: ai-image-workflow.up.railway.app
+Live Demo: https://ai-image-workflow.up.railway.app/
 
 A small node-based editor and backend graph runner. It covers frontend (Feature-Sliced Design), backend, a real image-generation API call, and DAG execution with parallel branches.
 
